@@ -32,7 +32,7 @@ const Header = () => {
             <div className="d-flex align-items-center justify-content-between">
                 <Link to="/" className="logo d-flex align-items-center">
                     <img src="/img/logo.png" alt="" />
-                    <span className="d-none d-lg-block">Research Permission System</span>
+                    <span className="d-none d-lg-block">Research Permit</span>
                 </Link>
                 <i className="bi bi-list toggle-sidebar-btn" onClick={toggleSidebar}></i>
             </div>

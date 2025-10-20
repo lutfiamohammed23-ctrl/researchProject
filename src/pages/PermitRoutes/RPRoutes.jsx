@@ -5,6 +5,8 @@ import Payrol from '../Payrol';
 import Dashboard from '../Applicant/Dashboard';
 import HomeLayout from '../HomeLayout';
 import Application from '../Applicant/Application';
+import Login from '../Login';
+import Register from '../Register';
 // import Login from '../Login';
 // import Register from '../Register';
 
@@ -12,10 +14,10 @@ const RPRoutes = createBrowserRouter(
     createRoutesFromElements(
         <>
             {/* Public routes */}
-            {/* <Route path="/" element={<Login />} /> */}
-            {/* <Route path="/register" element={<Register />} /> */}
+            <Route path="/" element={<Login />} /> 
+            <Route path="/register" element={<Register />} />
             <Route path="" element={<HomeLayout />}>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/attend" element={<Attendance />} />
                 <Route path="/payroll" element={<Payrol />} />
                 <Route path="/apply" element={<Application />} />

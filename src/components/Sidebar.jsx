@@ -9,7 +9,7 @@ const Sidebar = () => {
         <ul className="sidebar-nav" id="sidebar-nav">
 
         <li className="nav-item">
-          <Link className="nav-link collapsed" to="/">
+          <Link className="nav-link collapsed" to="/dashboard">
             <i className='bx bxs-dashboard'></i>
             <span>Dashboard</span>
           </Link>
