@@ -7,6 +7,8 @@ import HomeLayout from '../HomeLayout';
 import Application from '../Applicant/Application';
 import Login from '../Login';
 import Register from '../Register';
+import SetPassword from '../SetPassword';
+import VerifyOtp from '../VerifyOtp';
 // import Login from '../Login';
 // import Register from '../Register';
 
@@ -16,6 +18,8 @@ const RPRoutes = createBrowserRouter(
             {/* Public routes */}
             <Route path="/" element={<Login />} /> 
             <Route path="/register" element={<Register />} />
+            <Route path="/set-password" element={<SetPassword />} />
+            <Route path="/verify-otp" element={<VerifyOtp />} />
             <Route path="" element={<HomeLayout />}>
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/attend" element={<Attendance />} />
