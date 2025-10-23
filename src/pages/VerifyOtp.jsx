@@ -1,48 +1,3 @@
-// import { useState } from "react";
-// import { useLocation, useNavigate } from "react-router-dom";
-// import axios from "axios";
-
-// const VerifyOtp =()=> {
-//   const [otp, setOtp] = useState("");
-//   const location = useLocation();
-//   const navigate = useNavigate();
-//   const usernameOrEmail = location.state?.usernameOrEmail;
-
-//   const handleVerify = async (e) => {
-//     e.preventDefault();
-//     try {
-//       const res = await axios.post("http://localhost:8080/api/auth/verify-otp", {
-//         usernameOrEmail,
-//         otp
-//       });
-
-//       localStorage.setItem("accessToken", res.data.accessToken);
-//       localStorage.setItem("refreshToken", res.data.refreshToken);
-//       localStorage.setItem("username", res.data.user.username);
-//       navigate("/dashboard");
-//     } catch (err) {
-//       alert("Invalid or expired OTP");
-//     }
-//   };
-
-//   return (
-//     <div style={{ textAlign: "center", marginTop: "10%" }}>
-//       <h3>Enter OTP sent to your email</h3>
-//       <form onSubmit={handleVerify}>
-//         <input
-//           type="text"
-//           maxLength="6"
-//           value={otp}
-//           onChange={(e) => setOtp(e.target.value)}
-//           placeholder="6-digit code"
-//           required
-//         />
-//         <button type="submit">Verify OTP</button>
-//       </form>
-//     </div>
-//   );
-// }
-// export default VerifyOtp;
 import axios from "axios";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -74,6 +29,7 @@ const VerifyOtp = () => {
       const { accessToken, refreshToken, user } = res.data;
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("userId", user.id);
       localStorage.setItem("username", user.username);
       localStorage.setItem("email", user.email);
       localStorage.setItem("firstName", user.firstName);
