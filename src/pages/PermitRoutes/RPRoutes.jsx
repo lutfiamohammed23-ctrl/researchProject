@@ -9,6 +9,7 @@ import Login from '../Login';
 import Register from '../Register';
 import SetPassword from '../SetPassword';
 import VerifyOtp from '../VerifyOtp';
+import DashboardVpo from '../VPO/DashboardVpo';
 // import Login from '../Login';
 // import Register from '../Register';
 
@@ -25,6 +26,7 @@ const RPRoutes = createBrowserRouter(
                 <Route path="/attend" element={<Attendance />} />
                 <Route path="/payroll" element={<Payrol />} />
                 <Route path="/apply" element={<Application />} />
+                <Route path='/dashboardVpo' element={<DashboardVpo/>}/>
             </Route>
 
 

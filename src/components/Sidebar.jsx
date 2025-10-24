@@ -33,6 +33,11 @@ const Sidebar = () => {
             <i className="fas fa-sack-dollar" style={{marginRight:"3px",fontSize:"18px"}}></i><span>Payroll</span>
           </Link>
         </li>
+        <li className="nav-item">
+          <Link className="nav-link collapsed" to="dashboardVpo">
+            <i className="fas fa-sack-dollar" style={{marginRight:"3px",fontSize:"18px"}}></i><span>VPO</span>
+          </Link>
+        </li>
 
         {/* <li className="nav-item">
           <Link className="nav-link collapsed" to="perform">

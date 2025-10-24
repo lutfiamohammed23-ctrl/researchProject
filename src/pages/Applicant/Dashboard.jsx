@@ -1,89 +1,63 @@
 import { Button, Modal, Table } from 'antd';
 import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
+import { Chart, BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title } from "chart.js";
+
+Chart.register(BarController, BarElement, CategoryScale, LinearScale, Tooltip, Legend, Title);
 
 const Dashboard = () => {
-
-  const [data, setData] = useState([]);
-
-  const [selectedRecord, setSelectedRecord] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const showModal = (record) => {
-    setSelectedRecord(record);
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-    setSelectedRecord(null);
-  };
-
+  const chartRef = useRef(null);
+  const chartInstanceRef = useRef(null);
 
   useEffect(() => {
+    const ctx = chartRef.current.getContext("2d");
 
-    const fetchData = async () => {
-      // const res = await axios.get('https://jsonplaceholder.typicode.com/posts');
-      const res = await axios.get("http://192.168.18.198:8080/api/public/application");
-      setData(res.data);
+    // Destroy previous chart if exists
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.destroy();
     }
-    fetchData();
-  }, [])
 
-  const tableColumns = [
-    {
-      title: 'SN',
-      dataIndex: 'sn',
-      key: 'sn',
-      render: (text, record, index) => index + 1,
-    },
-    {
-      title: 'ApplicationNumber',
-      dataIndex: 'applicationNumber',
-      key: 'applicationNumber',
-    },
-    {
-      title: 'Research Title',
-      dataIndex: ["researchInfo", "title"],
-      key: 'title',
-    },
-    {
-      title: "Applicant Name",
-      dataIndex: ["applicantInfo", "firstName"],
-      key: "applicantName",
-      render: (text, record) =>
-        `${record.applicantInfo.firstName} ${record.applicantInfo.lastName}`,
-    }, {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
-      render: (text) => (
-        <span
-          style={{
-            color:
-              text === "DRAFT"
-                ? "orange"
-                : text === "APPROVED"
-                  ? "green"
-                  : "red",
-            fontWeight: "bold",
-          }}
-        >
-          {text}
-        </span>
-      ),
-    }, {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Button type="primary" onClick={() => showModal(record)}>
-          {/* <Button type="primary" > */}
-          View Details
-        </Button>
-      ),
-    },
+    // Initialize new chart
+    chartInstanceRef.current = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Approved", "Pending", "Rejected", "Permits"],
+        datasets: [
+          {
+            label: "Number of Applications",
+            data: [120, 45, 30, 25],
+            backgroundColor: [
+              "rgba(75, 192, 192, 0.7)",
+              "rgba(255, 206, 86, 0.7)",
+              "rgba(255, 99, 132, 0.7)",
+              "rgba(54, 162, 235, 0.7)",
+            ],
+            borderColor: [
+              "rgba(75, 192, 192, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(255, 99, 132, 1)",
+              "rgba(54, 162, 235, 1)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "top" },
+          title: { display: true, text: "Application Status Overview" },
+        },
+        scales: { y: { beginAtZero: true } },
+      },
+    });
 
-  ];
+    return () => {
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.destroy();
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -96,192 +70,93 @@ const Dashboard = () => {
           </ol>
         </nav>
       </div>
+
       <section className="section dashboard">
         <div className="row">
-          {/* Left side columns */}
           <div className="col-lg-12">
             <div className="row">
-              {/* Sales Card */}
-              <div className="col-xxl-3 col-md-6">
-                <div className="card info-card sales-card">
-                  <div className="filter">
-                    <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots" /></a>
-                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                      <li className="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-                      <li><a className="dropdown-item" href="#">Today</a></li>
-                      <li><a className="dropdown-item" href="#">This Month</a></li>
-                      <li><a className="dropdown-item" href="#">This Year</a></li>
-                    </ul>
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">Sales <span>| Today</span></h5>
-                    <div className="d-flex align-items-center">
-                      <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                        <i className="bi bi-cart" />
-                      </div>
-                      <div className="ps-3">
-                        <h6>145</h6>
-                        <span className="text-success small pt-1 fw-bold">12%</span> <span className="text-muted small pt-2 ps-1">increase</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>{/* End Sales Card */}
-              {/* Revenue Card */}
-              <div className="col-xxl-3 col-md-6">
-                <div className="card info-card revenue-card">
-                  <div className="filter">
-                    <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots" /></a>
-                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                      <li className="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-                      <li><a className="dropdown-item" href="#">Today</a></li>
-                      <li><a className="dropdown-item" href="#">This Month</a></li>
-                      <li><a className="dropdown-item" href="#">This Year</a></li>
-                    </ul>
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">Revenue <span>| This Month</span></h5>
-                    <div className="d-flex align-items-center">
-                      <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                        <i className="bi bi-currency-dollar" />
-                      </div>
-                      <div className="ps-3">
-                        <h6>$3,264</h6>
-                        <span className="text-success small pt-1 fw-bold">8%</span> <span className="text-muted small pt-2 ps-1">increase</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>{/* End Revenue Card */}
-              {/* Customers Card */}
-              <div className="col-xxl-3 col-xl-12">
-                <div className="card info-card customers-card">
-                  <div className="filter">
-                    <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots" /></a>
-                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                      <li className="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-                      <li><a className="dropdown-item" href="#">Today</a></li>
-                      <li><a className="dropdown-item" href="#">This Month</a></li>
-                      <li><a className="dropdown-item" href="#">This Year</a></li>
-                    </ul>
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">Customers <span>| This Year</span></h5>
-                    <div className="d-flex align-items-center">
-                      <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                        <i className="bi bi-people" />
-                      </div>
-                      <div className="ps-3">
-                        <h6>1244</h6>
-                        <span className="text-danger small pt-1 fw-bold">12%</span> <span className="text-muted small pt-2 ps-1">decrease</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>{/* End Customers Card */}
-              <div className="col-xxl-3 col-xl-12">
-                <div className="card info-card customers-card">
-                  <div className="filter">
-                    <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots" /></a>
-                    <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                      <li className="dropdown-header text-start">
-                        <h6>Filter</h6>
-                      </li>
-                      <li><a className="dropdown-item" href="#">Today</a></li>
-                      <li><a className="dropdown-item" href="#">This Month</a></li>
-                      <li><a className="dropdown-item" href="#">This Year</a></li>
-                    </ul>
-                  </div>
-                  <div className="card-body">
-                    <h5 className="card-title">Customers <span>| This Year</span></h5>
-                    <div className="d-flex align-items-center">
-                      <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                        <i className="bi bi-people" />
-                      </div>
-                      <div className="ps-3">
-                        <h6>1244</h6>
-                        <span className="text-danger small pt-1 fw-bold">12%</span> <span className="text-muted small pt-2 ps-1">decrease</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>{/* End Customers Card */}
-              {/* Reports */}
 
+              {/* All Applications Card */}
+              <InfoCard
+                title="All Applications"
+                subtitle="| Today"
+                icon="bi-layers"
+                value="145"
+                change="12%"
+                changeType="increase"
+              />
 
+              {/* Pending Applications Card */}
+              <InfoCard
+                title="Pending Applications"
+                subtitle="| This Month"
+                icon="bi-clock-history"
+                value="$3,264"
+                change="8%"
+                changeType="increase"
+              />
+
+              {/* Approved Applications Card */}
+              <InfoCard
+                title="Approved Applications"
+                subtitle="| This Year"
+                icon="bi-check-circle"
+                value="1244"
+                change="12%"
+                changeType="decrease"
+              />
+
+              {/* Rejected Applications Card */}
+              <InfoCard
+                title="Rejected Applications"
+                subtitle="| This Year"
+                icon="bi-x-circle"
+                value="1244"
+                change="12%"
+                changeType="decrease"
+              />
 
             </div>
-          </div>{/* End Left side columns */}
-
-
-        </div>
-        <div className="row">
-          <Table dataSource={data} columns={tableColumns} />
-
-          {/* Modal for details */}
-          <Modal
-            title="Application Details"
-            open={isModalVisible}
-            onCancel={handleCancel}
-            footer={null}
-            width={800}
-          >
-            {selectedRecord && (
-              <>
-                <Descriptions bordered column={1} size="small">
-                  <Descriptions.Item label="Application Number">
-                    {selectedRecord.applicationNumber}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Application Type">
-                    {selectedRecord.applicationType}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Status">
-                    {selectedRecord.status}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Research Title">
-                    {selectedRecord.researchInfo?.title}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Research Description">
-                    {selectedRecord.researchInfo?.description}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Applicant Name">
-                    {selectedRecord.applicantInfo?.firstName}{" "}
-                    {selectedRecord.applicantInfo?.lastName}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Email">
-                    {selectedRecord.applicantInfo?.email}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Institution">
-                    {selectedRecord.applicantInfo?.institution}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Research Start Date">
-                    {selectedRecord.researchInfo?.startDate}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Research End Date">
-                    {selectedRecord.researchInfo?.endDate}
-                  </Descriptions.Item>
-                  <Descriptions.Item label="Budget">
-                    {selectedRecord.researchInfo?.budget}{" "}
-                    {selectedRecord.researchInfo?.currency}
-                  </Descriptions.Item>
-                </Descriptions>
-              </>
-            )}
-          </Modal>
-
-
+          </div>
         </div>
       </section>
-      {/* </div> */}
 
+      {/* Chart Section */}
+      <div className="w-full max-w-md mx-auto mt-5">
+        <canvas ref={chartRef} height="120"></canvas>
+      </div>
     </>
   );
-}
+};
+
+// Reusable InfoCard component
+const InfoCard = ({ title, subtitle, icon, value, change, changeType }) => (
+  <div className="col-xxl-3 col-md-6">
+    <div className="card info-card">
+      <div className="filter">
+        <a className="icon" href="#" data-bs-toggle="dropdown"><i className="bi bi-three-dots" /></a>
+        <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+          <li className="dropdown-header text-start"><h6>Filter</h6></li>
+          <li><a className="dropdown-item" href="#">Today</a></li>
+          <li><a className="dropdown-item" href="#">This Month</a></li>
+          <li><a className="dropdown-item" href="#">This Year</a></li>
+        </ul>
+      </div>
+      <div className="card-body">
+        <h5 className="card-title">{title} <span>{subtitle}</span></h5>
+        <div className="d-flex align-items-center">
+          <div className="card-icon rounded-circle d-flex align-items-center justify-content-center">
+            <i className={`bi ${icon}`}></i>
+          </div>
+          <div className="ps-3">
+            <h6>{value}</h6>
+            <span className={`text-${changeType === 'increase' ? 'success' : 'danger'} small pt-1 fw-bold`}>{change}</span>
+            <span className="text-muted small pt-2 ps-1">{changeType}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+);
 
 export default Dashboard;

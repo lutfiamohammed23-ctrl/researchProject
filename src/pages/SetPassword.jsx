@@ -37,7 +37,8 @@ const SetPassword = () => {
 
         try {
             // Send password + token to backend
-            await axios.post("http://localhost:8080/api/auth/set-password", {
+            // await axios.post("http://localhost:8080/api/auth/set-password", {
+            await axios.post("http://192.168.18.198:8080/api/auth/set-password", {
                 token,
                 password
             });
