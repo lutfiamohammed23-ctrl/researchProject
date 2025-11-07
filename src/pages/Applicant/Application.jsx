@@ -1,130 +1,301 @@
-import React, { useState } from 'react';
-import axios from "axios";
+// import React, { useState } from 'react';
+// import axios from "axios";
+
+// function Application() {
+//     // --- Applicant Information States ---
+//     const [firstName, setFirstName] = useState("");
+//     const [lastName, setLastName] = useState("");
+//     const [email, setEmail] = useState("");
+//     const [phoneNumber, setPhoneNumber] = useState("");
+//     const [dob, setDob] = useState("");
+//     const [passportNumber, setPassportNumber] = useState("");
+//     const [gender, setGender] = useState("");
+//     const [nation, setNation] = useState("");
+//     const [nationalId, setNationalId] = useState("");
+//     const [address, setAddress] = useState("");
+//     const [city, setCity] = useState("");
+//     const [country, setCountry] = useState("");
+//     const [postalCode, setPostalCode] = useState("");
+//     const [institution, setInstitution] = useState("");
+//     const [position, setPosition] = useState("");
+//     const [department, setDepartment] = useState("");
+
+//     // --- Research Information States ---
+//     const [title, setTitle] = useState("");
+//     const [description, setDescription] = useState("");
+//     const [objectives, setObjectives] = useState("");
+//     const [methodology, setMethodology] = useState("");
+//     const [researchType, setResearchType] = useState("");
+//     const [startDate, setStartDate] = useState("");
+//     const [endDate, setEndDate] = useState("");
+//     const [budget, setBudget] = useState("");
+//     const [currency, setCurrency] = useState("");
+//     const [fundingSource, setFundingSource] = useState("");
+//     const [expectedOutcomes, setExpectedOutcomes] = useState("");
+//     const [ethicalConsiderations, setEthicalConsiderations] = useState("");
+//     const [dataCollectionMethods, setDataCollectionMethods] = useState("");
+//     const [sampleSize, setSampleSize] = useState("");
+
+//     // --- Application Information States ---
+//     const [applicationNo, setApplicationNo] = useState("");
+//     const [applicationType, setApplicationType] = useState("");
+//     const [applicationStatus, setApplicationStatus] = useState("");
+//     const [permitNumber, setPermitNumber] = useState("");
+//     const [rejectionReason, setRejectionReason] = useState("");
+//     const [officerNotes, setOfficerNotes] = useState("");
+
+//     // --- Options ---
+//     const ApplicationType = [
+//         { value: "FOREIGN_RESEARCHER", label: "Foreign Researcher/Filming" },
+//         { value: "LOCAL_RESEARCHER", label: "Local Researcher/Filming" },
+//         { value: "INSTITUTION_COMPANY", label: "Institution/Company Research" },
+//     ];
+
+//     const ApplicationStatus = [
+//         { value: "DRAFT", label: "Not yet submitted" },
+//         { value: "SUBMITTED", label: "Under initial review" },
+//         { value: "UNDER_REVIEW", label: "Being processed" },
+//         { value: "PENDING_PAYMENT", label: "Awaiting fee payment" },
+//         { value: "PAYMENT_COMPLETED", label: "Payment Completed - Processing final approval" },
+//         { value: "APPROVED", label: "Permit issued" },
+//         { value: "REJECTED", label: "Application denied" },
+//         { value: "CANCELLED", label: "Application withdrawn" },
+//         { value: "EXPIRED", label: "Application validity expired" },
+//         { value: "REVOKED", label: "Permit revoked due to violations" },
+//     ];
+
+
+//     const handleSubmit = async (e) => {
+//         e.preventDefault();
+
+//         // ✅ Retrieve user info from localStorage
+//         const accessToken = localStorage.getItem("accessToken");
+//         const userId = localStorage.getItem("userId");
+//         const firstNameStored = localStorage.getItem("firstName");
+//         const lastNameStored = localStorage.getItem("lastName");
+//         const emailStored = localStorage.getItem("email");
+
+//         if (!accessToken) {
+//             alert("You are not logged in. Please log in first.");
+//             return;
+//         }
+
+//         // ✅ Construct the nested payload structure that matches backend expectations
+//         const payload = {
+//             id: crypto.randomUUID(), // optional – backend can also auto-generate
+//             applicationNumber: applicationNo || "APP-" + Date.now(), // generate if empty
+//             applicationType,
+//             status: applicationStatus || "DRAFT",
+//             applicantId: userId,
+
+//             applicantInfo: {
+//                 firstName: firstName || firstNameStored,
+//                 lastName: lastName || lastNameStored,
+//                 email: email || emailStored,
+//                 phoneNumber,
+//                 dateOfBirth: dob,
+//                 gender,
+//                 nationality: nation,
+//                 passportNumber,
+//                 nationalId,
+//                 address,
+//                 city,
+//                 country,
+//                 postalCode,
+//                 institution,
+//                 department,
+//                 position,
+//             },
+
+//             researchInfo: {
+//                 title,
+//                 description,
+//                 objectives,
+//                 methodology,
+//                 researchType,
+//                 researchField: department || "General", // or add separate field
+//                 startDate,
+//                 endDate,
+//                 location: city || country || "",
+//                 budget: parseFloat(budget) || 0,
+//                 currency,
+//                 fundingSource,
+//                 expectedOutcomes,
+//                 ethicalConsiderations,
+//                 dataCollectionMethods,
+//                 sampleSize: parseInt(sampleSize) || 0,
+//                 involvesHumanSubjects: true,  // you can replace with checkbox later
+//                 involvesAnimals: false,
+//                 involvesSensitiveData: true,
+//             },
+
+//             rejectionReason,
+//             officerNotes,
+//         };
+
+//         try {
+//             const res = await axios.post(
+//                 "http://192.168.18.198:8080/api/application",
+//                 payload,
+//                 {
+//                     headers: {
+//                         Authorization: `Bearer ${accessToken}`,
+//                         "Content-Type": "application/json",
+//                     },
+//                 }
+//             );
+
+//             alert("✅ Application submitted successfully!");
+//             console.log("Response:", res.data);
+//         } catch (error) {
+//             console.error("❌ Submission error:", error.response?.data || error.message);
+//             alert(
+//                 `Error submitting application: ${error.response?.data?.message || error.message
+//                 }`
+//             );
+//         }
+//     };
+// src/pages/Application.jsx
+
+
+import React, { useState } from "react";
+import api from "../../services/AuthService";
 
 function Application() {
-    // --- Applicant Information States ---
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [email, setEmail] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [dob, setDob] = useState("");
-    const [passportNumber, setPassportNumber] = useState("");
-    const [gender, setGender] = useState("");
-    const [nation, setNation] = useState("");
-    const [nationalId, setNationalId] = useState("");
-    const [address, setAddress] = useState("");
-    const [city, setCity] = useState("");
-    const [country, setCountry] = useState("");
-    const [postalCode, setPostalCode] = useState("");
-    const [institution, setInstitution] = useState("");
-    const [position, setPosition] = useState("");
-    const [department, setDepartment] = useState("");
+  // --- Applicant Information States ---
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [dob, setDob] = useState("");
+  const [passportNumber, setPassportNumber] = useState("");
+  const [gender, setGender] = useState("");
+  const [nation, setNation] = useState("");
+  const [nationalId, setNationalId] = useState("");
+  const [address, setAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [country, setCountry] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [institution, setInstitution] = useState("");
+  const [position, setPosition] = useState("");
+  const [department, setDepartment] = useState("");
 
-    // --- Research Information States ---
-    const [title, setTitle] = useState("");
-    const [description, setDescription] = useState("");
-    const [objectives, setObjectives] = useState("");
-    const [methodology, setMethodology] = useState("");
-    const [researchType, setResearchType] = useState("");
-    const [startDate, setStartDate] = useState("");
-    const [endDate, setEndDate] = useState("");
-    const [budget, setBudget] = useState("");
-    const [currency, setCurrency] = useState("");
-    const [fundingSource, setFundingSource] = useState("");
-    const [expectedOutcomes, setExpectedOutcomes] = useState("");
-    const [ethicalConsiderations, setEthicalConsiderations] = useState("");
-    const [dataCollectionMethods, setDataCollectionMethods] = useState("");
-    const [sampleSize, setSampleSize] = useState("");
+  // --- Research Information States ---
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [objectives, setObjectives] = useState("");
+  const [methodology, setMethodology] = useState("");
+  const [researchType, setResearchType] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [budget, setBudget] = useState("");
+  const [currency, setCurrency] = useState("");
+  const [fundingSource, setFundingSource] = useState("");
+  const [expectedOutcomes, setExpectedOutcomes] = useState("");
+  const [ethicalConsiderations, setEthicalConsiderations] = useState("");
+  const [dataCollectionMethods, setDataCollectionMethods] = useState("");
+  const [sampleSize, setSampleSize] = useState("");
 
-    // --- Application Information States ---
-    const [applicationNo, setApplicationNo] = useState("");
-    const [applicationType, setApplicationType] = useState("");
-    const [applicationStatus, setApplicationStatus] = useState("");
-    const [permitNumber, setPermitNumber] = useState("");
-    const [rejectionReason, setRejectionReason] = useState("");
-    const [officerNotes, setOfficerNotes] = useState("");
+  // --- Application Information States ---
+  const [applicationNo, setApplicationNo] = useState("");
+  const [applicationType, setApplicationType] = useState("");
+  const [applicationStatus, setApplicationStatus] = useState("");
+  const [permitNumber, setPermitNumber] = useState("");
+  const [rejectionReason, setRejectionReason] = useState("");
+  const [officerNotes, setOfficerNotes] = useState("");
 
-    // --- Options ---
-    const ApplicationType = [
-        { value: "FOREIGN_RESEARCHER", label: "Foreign Researcher/Filming" },
-        { value: "LOCAL_RESEARCHER", label: "Local Researcher/Filming" },
-        { value: "INSTITUTION_COMPANY", label: "Institution/Company Research" },
-    ];
+  // --- Options ---
+  const ApplicationType = [
+    { value: "FOREIGN_RESEARCHER", label: "Foreign Researcher/Filming" },
+    { value: "LOCAL_RESEARCHER", label: "Local Researcher/Filming" },
+    { value: "INSTITUTION_COMPANY", label: "Institution/Company Research" },
+  ];
 
-    const ApplicationStatus = [
-        { value: "DRAFT", label: "Not yet submitted" },
-        { value: "SUBMITTED", label: "Under initial review" },
-        { value: "UNDER_REVIEW", label: "Being processed" },
-        { value: "PENDING_PAYMENT", label: "Awaiting fee payment" },
-        { value: "PAYMENT_COMPLETED", label: "Payment Completed - Processing final approval" },
-        { value: "APPROVED", label: "Permit issued" },
-        { value: "REJECTED", label: "Application denied" },
-        { value: "CANCELLED", label: "Application withdrawn" },
-        { value: "EXPIRED", label: "Application validity expired" },
-        { value: "REVOKED", label: "Permit revoked due to violations" },
-    ];
+  const ApplicationStatus = [
+    { value: "DRAFT", label: "Not yet submitted" },
+    { value: "SUBMITTED", label: "Under initial review" },
+    { value: "UNDER_REVIEW", label: "Being processed" },
+    { value: "PENDING_PAYMENT", label: "Awaiting fee payment" },
+    { value: "PAYMENT_COMPLETED", label: "Payment Completed" },
+    { value: "APPROVED", label: "Permit issued" },
+    { value: "REJECTED", label: "Application denied" },
+  ];
 
-    // --- Submit Handler ---
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        const payload = {
-            firstName,
-            lastName,
-            email,
-            phoneNumber,
-            dob,
-            passportNumber,
-            gender,
-            nation,
-            nationalId,
-            address,
-            city,
-            country,
-            postalCode,
-            institution,
-            position,
-            department,
-            title,
-            description,
-            objectives,
-            methodology,
-            researchType,
-            startDate,
-            endDate,
-            budget,
-            currency,
-            fundingSource,
-            expectedOutcomes,
-            ethicalConsiderations,
-            dataCollectionMethods,
-            sampleSize,
-            applicationNo,
-            applicationType,
-            applicationStatus,
-            permitNumber,
-            rejectionReason,
-            officerNotes,
-        };
+    // ✅ Get logged-in user info
+    const userId = localStorage.getItem("userId");
+    const storedFirstName = localStorage.getItem("firstName");
+    const storedLastName = localStorage.getItem("lastName");
+    const storedEmail = localStorage.getItem("email");
 
-        try {
-            const token = "YOUR_ACCESS_TOKEN_HERE"; // Replace with your token
-            const res = await axios.post(  "http://192.168.18.198:8080/api/auth/login",  payload,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        "Content-Type": "application/json",
-                    },
-                }
-            );
-            alert("Application submitted successfully!");
-            console.log("Response:", res.data);
-        } catch (error) {
-            console.error("Submission error:", error);
-            alert("Error submitting application");
-        }
+    if (!userId) {
+      alert("⚠️ You must be logged in to submit an application.");
+      return;
+    }
+
+    // ✅ Build backend-compatible payload
+    const payload = {
+      applicationNumber: applicationNo || "APP-" + Date.now(),
+      applicationType,
+      status: applicationStatus || "DRAFT",
+      applicantId: userId,
+
+      applicantInfo: {
+        firstName: firstName || storedFirstName,
+        lastName: lastName || storedLastName,
+        email: email || storedEmail,
+        phoneNumber,
+        dateOfBirth: dob,
+        gender,
+        nationality: nation,
+        passportNumber,
+        nationalId,
+        address,
+        city,
+        country,
+        postalCode,
+        institution,
+        department,
+        position,
+      },
+
+      researchInfo: {
+        title,
+        description,
+        objectives,
+        methodology,
+        researchType,
+        researchField: department || "General",
+        startDate,
+        endDate,
+        location: city || country || "",
+        budget: parseFloat(budget) || 0,
+        currency,
+        fundingSource,
+        expectedOutcomes,
+        ethicalConsiderations,
+        dataCollectionMethods,
+        sampleSize: parseInt(sampleSize) || 0,
+        involvesHumanSubjects: true,
+        involvesAnimals: false,
+        involvesSensitiveData: true,
+      },
+
+      rejectionReason,
+      officerNotes,
     };
 
+    try {
+      const res = await api.post("/application", payload); // ✅ automatic token injection
+      alert("✅ Application submitted successfully!");
+      console.log("Response:", res.data);
+    } catch (error) {
+      console.error("❌ Submission error:", error.response?.data || error.message);
+      alert(`Error: ${error.response?.data?.message || error.message}`);
+    }
+  };
     return (
 
         <div>
@@ -157,7 +328,7 @@ function Application() {
                         </div>
                         <div className="col-md-4">
                             <label htmlFor="inputPassword5" className="form-label">Passport Number</label>
-                            <input type="number" className="form-control" id="inputPassword5" placeholder='Passport Number' value={passportNumber} onChange={(e) => setPassportNumber(e.target.value)} />
+                            <input type="text" className="form-control" id="inputPassword5" placeholder='Passport Number' value={passportNumber} onChange={(e) => setPassportNumber(e.target.value)} />
                         </div>
 
 
@@ -234,7 +405,7 @@ function Application() {
                         </div>
                         <div className="col-md-4">
                             <label htmlFor="inputPassword5" className="form-label">National Id</label>
-                            <input type="number" className="form-control" id="inputPassword5" placeholder='National Id' value={nationalId} onChange={(e) => setNationalId(e.target.value)} />
+                            <input type="text" className="form-control" id="inputPassword5" placeholder='National Id' value={nationalId} onChange={(e) => setNationalId(e.target.value)} />
                         </div>
 
 
@@ -271,13 +442,13 @@ function Application() {
                             <input type="text" className="form-control" placeholder="Department" value={department} onChange={(e) => setDepartment(e.target.value)} />
                         </div>
                         <br /><br />
-                        <hr />
 
                         <h2 className="sub-title fs-1">Research Information</h2> <br></br>
+                        <hr />
 
                         <div className="col-md-4">
                             <label htmlFor="inputName5" className="form-label">Tittle</label>
-                            <input type="text" className="form-control" placeholder="Tittle" value={title} onChange={(e) => setTitle(e.target.value)}/>
+                            <input type="text" className="form-control" placeholder="Tittle" value={title} onChange={(e) => setTitle(e.target.value)} />
                         </div>
 
                         <div className="col-md-4">
@@ -343,10 +514,9 @@ function Application() {
                         </div>
 
 
-
-
                         <h2 className="sub-title fs-1">Applicantion Information</h2> <br></br>
 
+                        <hr />
                         <div className="col-md-4">
                             <label htmlFor="inputName5" className="form-label">Application No</label>
                             <input type="text" className="form-control" placeholder="Application No" value={applicationNo} onChange={(e) => setApplicationNo(e.target.value)} />
@@ -380,7 +550,7 @@ function Application() {
 
                         <div className="col-md-4">
                             <label htmlFor="inputName5" className="form-label">Permit Number</label>
-                            <input type="number" className="form-control" placeholder="Permit Number" value={permitNumber} onChange={(e) => setPermitNumber(e.target.value)} />
+                            <input type="text" className="form-control" placeholder="Permit Number" value={permitNumber} onChange={(e) => setPermitNumber(e.target.value)} />
                         </div>
                         <div className="col-md-4">
                             <label htmlFor="inputEmail5" className="form-label">Rejection Reason</label>
