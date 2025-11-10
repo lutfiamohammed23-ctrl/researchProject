@@ -12,34 +12,46 @@ const VerifyOtp = () => {
 
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
+
     if (!usernameOrEmail) {
       alert("Username/email missing. Please login again.");
-      navigate("/login");
+      navigate("/");
       return;
     }
 
     setLoading(true);
     try {
-      // const res = await axios.post("http://localhost:8080/api/auth/verify-otp", {
       const res = await axios.post("http://192.168.18.198:8080/api/auth/verify-otp", {
         usernameOrEmail,
-        otp
+        otp,
       });
 
-      // Save JWT tokens in localStorage
       const { accessToken, refreshToken, user } = res.data;
+
+      console.log("✅ Backend returned user:", user);
+
+      // Save tokens
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+
+      // Save user info
       localStorage.setItem("userId", user.id);
       localStorage.setItem("username", user.username);
       localStorage.setItem("email", user.email);
       localStorage.setItem("firstName", user.firstName);
       localStorage.setItem("lastName", user.lastName);
-      localStorage.setItem("role", user.role);
+
+      // Save roles as JSON array
+      if (user.roles && Array.isArray(user.roles)) {
+        localStorage.setItem("roles", JSON.stringify(user.roles));
+        console.log("✅ Roles stored in localStorage:", user.roles);
+      } else {
+        localStorage.setItem("roles", JSON.stringify([]));
+        console.warn("⚠️ No roles found for user, stored empty array");
+      }
 
       alert("Login successful!");
       navigate("/dashboard");
-
     } catch (error) {
       console.error("OTP verification failed:", error.response?.data || error.message);
       alert("OTP verification failed: " + (error.response?.data || error.message));
