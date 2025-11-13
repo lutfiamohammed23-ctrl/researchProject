@@ -1,308 +1,155 @@
-// import React, { useState } from 'react';
-// import axios from "axios";
-
-// function Application() {
-//     // --- Applicant Information States ---
-//     const [firstName, setFirstName] = useState("");
-//     const [lastName, setLastName] = useState("");
-//     const [email, setEmail] = useState("");
-//     const [phoneNumber, setPhoneNumber] = useState("");
-//     const [dob, setDob] = useState("");
-//     const [passportNumber, setPassportNumber] = useState("");
-//     const [gender, setGender] = useState("");
-//     const [nation, setNation] = useState("");
-//     const [nationalId, setNationalId] = useState("");
-//     const [address, setAddress] = useState("");
-//     const [city, setCity] = useState("");
-//     const [country, setCountry] = useState("");
-//     const [postalCode, setPostalCode] = useState("");
-//     const [institution, setInstitution] = useState("");
-//     const [position, setPosition] = useState("");
-//     const [department, setDepartment] = useState("");
-
-//     // --- Research Information States ---
-//     const [title, setTitle] = useState("");
-//     const [description, setDescription] = useState("");
-//     const [objectives, setObjectives] = useState("");
-//     const [methodology, setMethodology] = useState("");
-//     const [researchType, setResearchType] = useState("");
-//     const [startDate, setStartDate] = useState("");
-//     const [endDate, setEndDate] = useState("");
-//     const [budget, setBudget] = useState("");
-//     const [currency, setCurrency] = useState("");
-//     const [fundingSource, setFundingSource] = useState("");
-//     const [expectedOutcomes, setExpectedOutcomes] = useState("");
-//     const [ethicalConsiderations, setEthicalConsiderations] = useState("");
-//     const [dataCollectionMethods, setDataCollectionMethods] = useState("");
-//     const [sampleSize, setSampleSize] = useState("");
-
-//     // --- Application Information States ---
-//     const [applicationNo, setApplicationNo] = useState("");
-//     const [applicationType, setApplicationType] = useState("");
-//     const [applicationStatus, setApplicationStatus] = useState("");
-//     const [permitNumber, setPermitNumber] = useState("");
-//     const [rejectionReason, setRejectionReason] = useState("");
-//     const [officerNotes, setOfficerNotes] = useState("");
-
-//     // --- Options ---
-//     const ApplicationType = [
-//         { value: "FOREIGN_RESEARCHER", label: "Foreign Researcher/Filming" },
-//         { value: "LOCAL_RESEARCHER", label: "Local Researcher/Filming" },
-//         { value: "INSTITUTION_COMPANY", label: "Institution/Company Research" },
-//     ];
-
-//     const ApplicationStatus = [
-//         { value: "DRAFT", label: "Not yet submitted" },
-//         { value: "SUBMITTED", label: "Under initial review" },
-//         { value: "UNDER_REVIEW", label: "Being processed" },
-//         { value: "PENDING_PAYMENT", label: "Awaiting fee payment" },
-//         { value: "PAYMENT_COMPLETED", label: "Payment Completed - Processing final approval" },
-//         { value: "APPROVED", label: "Permit issued" },
-//         { value: "REJECTED", label: "Application denied" },
-//         { value: "CANCELLED", label: "Application withdrawn" },
-//         { value: "EXPIRED", label: "Application validity expired" },
-//         { value: "REVOKED", label: "Permit revoked due to violations" },
-//     ];
-
-
-//     const handleSubmit = async (e) => {
-//         e.preventDefault();
-
-//         // ✅ Retrieve user info from localStorage
-//         const accessToken = localStorage.getItem("accessToken");
-//         const userId = localStorage.getItem("userId");
-//         const firstNameStored = localStorage.getItem("firstName");
-//         const lastNameStored = localStorage.getItem("lastName");
-//         const emailStored = localStorage.getItem("email");
-
-//         if (!accessToken) {
-//             alert("You are not logged in. Please log in first.");
-//             return;
-//         }
-
-//         // ✅ Construct the nested payload structure that matches backend expectations
-//         const payload = {
-//             id: crypto.randomUUID(), // optional – backend can also auto-generate
-//             applicationNumber: applicationNo || "APP-" + Date.now(), // generate if empty
-//             applicationType,
-//             status: applicationStatus || "DRAFT",
-//             applicantId: userId,
-
-//             applicantInfo: {
-//                 firstName: firstName || firstNameStored,
-//                 lastName: lastName || lastNameStored,
-//                 email: email || emailStored,
-//                 phoneNumber,
-//                 dateOfBirth: dob,
-//                 gender,
-//                 nationality: nation,
-//                 passportNumber,
-//                 nationalId,
-//                 address,
-//                 city,
-//                 country,
-//                 postalCode,
-//                 institution,
-//                 department,
-//                 position,
-//             },
-
-//             researchInfo: {
-//                 title,
-//                 description,
-//                 objectives,
-//                 methodology,
-//                 researchType,
-//                 researchField: department || "General", // or add separate field
-//                 startDate,
-//                 endDate,
-//                 location: city || country || "",
-//                 budget: parseFloat(budget) || 0,
-//                 currency,
-//                 fundingSource,
-//                 expectedOutcomes,
-//                 ethicalConsiderations,
-//                 dataCollectionMethods,
-//                 sampleSize: parseInt(sampleSize) || 0,
-//                 involvesHumanSubjects: true,  // you can replace with checkbox later
-//                 involvesAnimals: false,
-//                 involvesSensitiveData: true,
-//             },
-
-//             rejectionReason,
-//             officerNotes,
-//         };
-
-//         try {
-//             const res = await axios.post(
-//                 "http://192.168.18.198:8080/api/application",
-//                 payload,
-//                 {
-//                     headers: {
-//                         Authorization: `Bearer ${accessToken}`,
-//                         "Content-Type": "application/json",
-//                     },
-//                 }
-//             );
-
-//             alert("✅ Application submitted successfully!");
-//             console.log("Response:", res.data);
-//         } catch (error) {
-//             console.error("❌ Submission error:", error.response?.data || error.message);
-//             alert(
-//                 `Error submitting application: ${error.response?.data?.message || error.message
-//                 }`
-//             );
-//         }
-//     };
-// src/pages/Application.jsx
-
-
 import React, { useState } from "react";
 import api from "../../services/AuthService";
 
 function Application() {
-  // --- Applicant Information States ---
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [dob, setDob] = useState("");
-  const [passportNumber, setPassportNumber] = useState("");
-  const [gender, setGender] = useState("");
-  const [nation, setNation] = useState("");
-  const [nationalId, setNationalId] = useState("");
-  const [address, setAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-  const [institution, setInstitution] = useState("");
-  const [position, setPosition] = useState("");
-  const [department, setDepartment] = useState("");
+    // --- Applicant Information States ---
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [dob, setDob] = useState("");
+    const [passportNumber, setPassportNumber] = useState("");
+    const [gender, setGender] = useState("");
+    const [nation, setNation] = useState("");
+    const [nationalId, setNationalId] = useState("");
+    const [address, setAddress] = useState("");
+    const [city, setCity] = useState("");
+    const [country, setCountry] = useState("");
+    const [postalCode, setPostalCode] = useState("");
+    const [institution, setInstitution] = useState("");
+    const [position, setPosition] = useState("");
+    const [department, setDepartment] = useState("");
 
-  // --- Research Information States ---
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [objectives, setObjectives] = useState("");
-  const [methodology, setMethodology] = useState("");
-  const [researchType, setResearchType] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [budget, setBudget] = useState("");
-  const [currency, setCurrency] = useState("");
-  const [fundingSource, setFundingSource] = useState("");
-  const [expectedOutcomes, setExpectedOutcomes] = useState("");
-  const [ethicalConsiderations, setEthicalConsiderations] = useState("");
-  const [dataCollectionMethods, setDataCollectionMethods] = useState("");
-  const [sampleSize, setSampleSize] = useState("");
+    // --- Research Information States ---
+    const [title, setTitle] = useState("");
+    const [description, setDescription] = useState("");
+    const [objectives, setObjectives] = useState("");
+    const [methodology, setMethodology] = useState("");
+    const [researchType, setResearchType] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [location, setLocation] = useState("");
+    const [budget, setBudget] = useState("");
+    const [currency, setCurrency] = useState("");
+    const [fundingSource, setFundingSource] = useState("");
+    const [expectedOutcomes, setExpectedOutcomes] = useState("");
+    const [ethicalConsiderations, setEthicalConsiderations] = useState("");
+    const [dataCollectionMethods, setDataCollectionMethods] = useState("");
+    const [sampleSize, setSampleSize] = useState("");
+    const [involvesHumanSubjects, setInvolvesHumanSubjects] = useState(false);
+    const [involvesAnimals, setInvolvesAnimals] = useState(false);
+    const [involvesSensitiveData, setInvolvesSensitiveData] = useState(false);
 
-  // --- Application Information States ---
-  const [applicationNo, setApplicationNo] = useState("");
-  const [applicationType, setApplicationType] = useState("");
-  const [applicationStatus, setApplicationStatus] = useState("");
-  const [permitNumber, setPermitNumber] = useState("");
-  const [rejectionReason, setRejectionReason] = useState("");
-  const [officerNotes, setOfficerNotes] = useState("");
+    // --- Application Information States ---
+    const [applicationNo, setApplicationNo] = useState("");
+    const [applicationType, setApplicationType] = useState("");
+    const [applicationStatus, setApplicationStatus] = useState("");
+    const [permitNumber, setPermitNumber] = useState("");
+    const [rejectionReason, setRejectionReason] = useState("");
+    const [officerNotes, setOfficerNotes] = useState("");
 
-  // --- Options ---
-  const ApplicationType = [
-    { value: "FOREIGN_RESEARCHER", label: "Foreign Researcher/Filming" },
-    { value: "LOCAL_RESEARCHER", label: "Local Researcher/Filming" },
-    { value: "INSTITUTION_COMPANY", label: "Institution/Company Research" },
-  ];
+    // --- Options ---
+    const ApplicationType = [
+        { value: "FOREIGN_RESEARCHER", label: "Foreign Researcher/Filming" },
+        { value: "LOCAL_RESEARCHER", label: "Local Researcher/Filming" },
+        { value: "INSTITUTION_COMPANY", label: "Institution/Company Research" },
+    ];
 
-  const ApplicationStatus = [
-    { value: "DRAFT", label: "Not yet submitted" },
-    { value: "SUBMITTED", label: "Under initial review" },
-    { value: "UNDER_REVIEW", label: "Being processed" },
-    { value: "PENDING_PAYMENT", label: "Awaiting fee payment" },
-    { value: "PAYMENT_COMPLETED", label: "Payment Completed" },
-    { value: "APPROVED", label: "Permit issued" },
-    { value: "REJECTED", label: "Application denied" },
-  ];
+    const ApplicationStatus = [
+        { value: "DRAFT", label: "Not yet submitted" },
+        { value: "SUBMITTED", label: "Under initial review" },
+        { value: "UNDER_REVIEW", label: "Being processed" },
+        { value: "PENDING_PAYMENT", label: "Awaiting fee payment" },
+        { value: "PAYMENT_COMPLETED", label: "Payment Completed" },
+        { value: "APPROVED", label: "Permit issued" },
+        { value: "REJECTED", label: "Application denied" },
+    ];
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    // ✅ Get logged-in user info
-    const userId = localStorage.getItem("userId");
-    const storedFirstName = localStorage.getItem("firstName");
-    const storedLastName = localStorage.getItem("lastName");
-    const storedEmail = localStorage.getItem("email");
+        // ✅ Get logged-in user info
+        const userId = localStorage.getItem("userId");
+        const storedFirstName = localStorage.getItem("firstName");
+        const storedLastName = localStorage.getItem("lastName");
+        const storedEmail = localStorage.getItem("email");
 
-    if (!userId) {
-      alert("⚠️ You must be logged in to submit an application.");
-      return;
-    }
+        if (!userId) {
+            alert("⚠️ You must be logged in to submit an application.");
+            return;
+        }
 
-    // ✅ Build backend-compatible payload
-    const payload = {
-      applicationNumber: applicationNo || "APP-" + Date.now(),
-      applicationType,
-      status: applicationStatus || "DRAFT",
-      applicantId: userId,
+        // ✅ Build backend-compatible payload
+        const payload = {
+            applicationNumber: applicationNo || "APP-" + Date.now(),
+            applicationType,
+            status: applicationStatus || "DRAFT",
+            applicantId: userId,
 
-      applicantInfo: {
-        firstName: firstName || storedFirstName,
-        lastName: lastName || storedLastName,
-        email: email || storedEmail,
-        phoneNumber,
-        dateOfBirth: dob,
-        gender,
-        nationality: nation,
-        passportNumber,
-        nationalId,
-        address,
-        city,
-        country,
-        postalCode,
-        institution,
-        department,
-        position,
-      },
+            applicantInfo: {
+                firstName: firstName || storedFirstName,
+                lastName: lastName || storedLastName,
+                email: email || storedEmail,
+                phoneNumber,
+                dateOfBirth: dob,
+                gender,
+                nationality: nation,
+                passportNumber,
+                nationalId,
+                address,
+                city,
+                country,
+                postalCode,
+                institution,
+                department,
+                position,
+            },
 
-      researchInfo: {
-        title,
-        description,
-        objectives,
-        methodology,
-        researchType,
-        researchField: department || "General",
-        startDate,
-        endDate,
-        location: city || country || "",
-        budget: parseFloat(budget) || 0,
-        currency,
-        fundingSource,
-        expectedOutcomes,
-        ethicalConsiderations,
-        dataCollectionMethods,
-        sampleSize: parseInt(sampleSize) || 0,
-        involvesHumanSubjects: true,
-        involvesAnimals: false,
-        involvesSensitiveData: true,
-      },
+            researchInfo: {
+                title,
+                description,
+                objectives,
+                methodology,
+                researchType,
+                researchField: department || "General",
+                startDate,
+                endDate,
+                location: city || country || "",
+                budget: parseFloat(budget) || 0,
+                currency,
+                fundingSource,
+                expectedOutcomes,
+                ethicalConsiderations,
+                dataCollectionMethods,
+                sampleSize: parseInt(sampleSize) || 0,
+                involvesHumanSubjects: true,
+                involvesAnimals: false,
+                involvesSensitiveData: true,
+            },
 
-      rejectionReason,
-      officerNotes,
+            rejectionReason,
+            officerNotes,
+        };
+
+        try {
+            const res = await api.post("/application", payload); // ✅ automatic token injection
+            alert("✅ Application submitted successfully!");
+            console.log("Response:", res.data);
+        } catch (error) {
+            console.error("❌ Submission error:", error.response?.data || error.message);
+            alert(`Error: ${error.response?.data?.message || error.message}`);
+        }
     };
-
-    try {
-      const res = await api.post("/application", payload); // ✅ automatic token injection
-      alert("✅ Application submitted successfully!");
-      console.log("Response:", res.data);
-    } catch (error) {
-      console.error("❌ Submission error:", error.response?.data || error.message);
-      alert(`Error: ${error.response?.data?.message || error.message}`);
-    }
-  };
     return (
 
         <div>
             <div className="card">
                 <div className="card-body">
-                    <h2 className="sub-title fs-1">Applicant Information</h2> <br></br>
+                    {/* <h2 className="sub-title fs-1">Applicant Information</h2> <br></br>  */}
                     <form className="row g-3" onSubmit={handleSubmit}>
+
+                        <h2 className="sub-title fs-1">Applicant Information</h2> <br></br>
+                        <hr />
 
                         <div className="col-md-4">
                             <label htmlFor="inputName5" className="form-label">First Name</label>
@@ -327,12 +174,6 @@ function Application() {
                             <input type="date" className="form-control" id="inputEmail5" placeholder='Date Of Birth' value={dob} onChange={(e) => setDob(e.target.value)} />
                         </div>
                         <div className="col-md-4">
-                            <label htmlFor="inputPassword5" className="form-label">Passport Number</label>
-                            <input type="text" className="form-control" id="inputPassword5" placeholder='Passport Number' value={passportNumber} onChange={(e) => setPassportNumber(e.target.value)} />
-                        </div>
-
-
-                        <div className="col-md-4">
                             <label htmlFor="inputName5" className="form-label">Gender</label>
                             <select id="inputState" class="form-select" value={gender} onChange={(e) => setGender(e.target.value)}>
                                 <option selected="">Choose...</option>
@@ -343,7 +184,7 @@ function Application() {
                             </select>
                         </div>
                         <div className="col-md-4">
-                            <label htmlFor="inputEmail5" className="form-label">Select Nation</label>
+                            <label htmlFor="inputEmail5" className="form-label">Nationality</label>
                             <select id="inputState" class="form-select" value={nation} onChange={(e) => setNation(e.target.value)}>
                                 <option selected="">Choose...</option>
                                 <option value="opt1">Select Nation</option>
@@ -404,6 +245,13 @@ function Application() {
                             </select>
                         </div>
                         <div className="col-md-4">
+                            <label htmlFor="inputPassword5" className="form-label">Passport Number</label>
+                            <input type="text" className="form-control" id="inputPassword5" placeholder='Passport Number' value={passportNumber} onChange={(e) => setPassportNumber(e.target.value)} />
+                        </div>
+
+
+
+                        <div className="col-md-4">
                             <label htmlFor="inputPassword5" className="form-label">National Id</label>
                             <input type="text" className="form-control" id="inputPassword5" placeholder='National Id' value={nationalId} onChange={(e) => setNationalId(e.target.value)} />
                         </div>
@@ -435,15 +283,16 @@ function Application() {
                             <label htmlFor="inputPassword5" className="form-label">Position</label>
                             <input type="text" className="form-control" id="inputPassword5" placeholder='Position' value={position} onChange={(e) => setPosition(e.target.value)} />
                         </div>
-
-
                         <div className="col-md-12">
                             <label htmlFor="inputName5" className="form-label">Department</label>
                             <input type="text" className="form-control" placeholder="Department" value={department} onChange={(e) => setDepartment(e.target.value)} />
                         </div>
                         <br /><br />
 
+
+
                         <h2 className="sub-title fs-1">Research Information</h2> <br></br>
+
                         <hr />
 
                         <div className="col-md-4">
@@ -463,10 +312,12 @@ function Application() {
                             <label htmlFor="inputPassword5" className="form-label">Methodology</label>
                             <input type="text" className="form-control" id="inputPassword5" placeholder='Methodology' value={methodology} onChange={(e) => setMethodology(e.target.value)} />
                         </div>
-
-
                         <div className="col-md-4">
                             <label htmlFor="inputName5" className="form-label">Research Type</label>
+                            <input type="text" className="form-control" placeholder="Research Type" value={researchType} onChange={(e) => setResearchType(e.target.value)} />
+                        </div>
+                        <div className="col-md-4">
+                            <label htmlFor="inputName5" className="form-label">Research Field</label>
                             <input type="text" className="form-control" placeholder="Research Type" value={researchType} onChange={(e) => setResearchType(e.target.value)} />
                         </div>
                         <div className="col-md-4">
@@ -478,14 +329,30 @@ function Application() {
                             <input type="date" className="form-control" id="inputPassword5" placeholder='End Date' value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                         </div>
 
+                        <div className="col-md-4">
+                            <label htmlFor="inputLocation" className="form-label">Location</label>
+                            <input type="text" className="form-control" placeholder="location" value={location} onChange={(e) => setLocation(e.target.value)} />
+                        </div>
+                        {/* <div className="col-md-4">
+                            <label htmlFor="inputBudget" className="form-label">Budget</label>
+                            <input type="text" className="form-control" placeholder="Budget" value={budget} onChange={(e) => setBudget(e.target.value)} />
+                        </div> */}
+                        <div className="col-md-4">
+                            <label htmlFor="inputBudget" className="form-label">Budget</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                placeholder="Budget"
+                                value={budget}
+                                onChange={(e) => setBudget(parseFloat(e.target.value) || 0)}
+                                min="0"
+                                step="0.01"
+                            />
+                        </div>
 
                         <div className="col-md-4">
-                            <label htmlFor="inputName5" className="form-label">Budget</label>
-                            <input type="text" className="form-control" placeholder="Budget" value={budget} onChange={(e) => setBudget(e.target.value)} />
-                        </div>
-                        <div className="col-md-4">
                             <label htmlFor="inputEmail5" className="form-label">Currency</label>
-                            <input type="text" className="form-control" id="inputEmail5" placeholder='Currency' value={currency} onChange={(e) => setCurrency(e.target.value)} />
+                            <input type="text" className="form-control" id="currency" placeholder='Currency' value={currency} onChange={(e) => setCurrency(e.target.value)} />
                         </div>
                         <div className="col-md-4">
                             <label htmlFor="inputPassword5" className="form-label">Funding Source</label>
@@ -508,19 +375,88 @@ function Application() {
 
 
 
-                        <div className="col-md-12">
+                        {/* <div className="col-md-12">
                             <label htmlFor="inputName5" className="form-label">Sample Size</label>
-                            <input type="text" className="form-control" placeholder="Sample Size" value={sampleSize} onChange={(e) => setSampleSize(e.target.value)} />
+                            <input type="number" className="form-control" placeholder="Sample Size" value={sampleSize} onChange={(e) => setSampleSize(e.target.value)} />
+                        </div> */}
+
+                        <div className="col-md-12 mb-3">
+                            <label htmlFor="sampleSize" className="form-label">Sample Size</label>
+                            <input
+                                type="number"
+                                className="form-control"
+                                id="sampleSize"
+                                placeholder="Enter sample size"
+                                value={sampleSize}
+                                onChange={(e) => setSampleSize(e.target.value)}
+                                min="0"
+                            />
                         </div>
+
+                        <div className="col-md-12 mb-3">
+                            <label className="form-label d-block">Research Involves</label>
+                            <div className="d-flex flex-wrap gap-4">
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id="involvesHumanSubjects"
+                                        checked={involvesHumanSubjects || false}
+                                        onChange={(e) => setInvolvesHumanSubjects(e.target.checked)}
+                                    />
+                                    <label className="form-check-label" htmlFor="involvesHumanSubjects">
+                                        Human Subjects
+                                    </label>
+                                </div>
+
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id="involvesAnimals"
+                                        checked={involvesAnimals || false}
+                                        onChange={(e) => setInvolvesAnimals(e.target.checked)}
+                                    />
+                                    <label className="form-check-label" htmlFor="involvesAnimals">
+                                        Animals
+                                    </label>
+                                </div>
+                                <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id="involvesSensitiveData"
+                                        checked={involvesSensitiveData || false}
+                                        onChange={(e) => setInvolvesSensitiveData(e.target.checked)}
+                                    />
+                                    <label className="form-check-label" htmlFor="involvesSensitiveData">
+                                        Sensitive Data
+                                    </label>
+                                </div>
+                                {/* <div className="form-check">
+                                    <input
+                                        className="form-check-input"
+                                        type="checkbox"
+                                        id="involvesSensitiveData"
+                                        checked={involvesSensitiveData}
+                                        onChange={(e) => setInvolvesSensitiveData(e.target.checked)}
+                                    />
+                                    <label className="form-check-label" htmlFor="involvesSensitiveData">
+                                        Sensitive Data
+                                    </label>
+                                </div> */}
+                            </div>
+                        </div>
+
 
 
                         <h2 className="sub-title fs-1">Applicantion Information</h2> <br></br>
 
                         <hr />
-                        <div className="col-md-4">
+                        {/* <div className="col-md-4">
                             <label htmlFor="inputName5" className="form-label">Application No</label>
                             <input type="text" className="form-control" placeholder="Application No" value={applicationNo} onChange={(e) => setApplicationNo(e.target.value)} />
-                        </div>
+                        </div> */}
 
                         <div className="col-md-4">
                             <label className="form-label">Application Type</label>
@@ -536,7 +472,7 @@ function Application() {
                             </select>
                         </div>
 
-                        <div className="col-md-4">
+                        {/* <div className="col-md-4">
                             <label className="form-label">Application Status</label>
                             <select className="form-control" name="applicationStatus" value={applicationStatus} onChange={(e) => setApplicationStatus(e.target.value)}>
                                 <option value="">--- Select Application Status ---</option>
@@ -546,20 +482,21 @@ function Application() {
                                     </option>
                                 ))}
                             </select>
-                        </div>
+                        </div> */}
 
-                        <div className="col-md-4">
+                        {/* <div className="col-md-4">
                             <label htmlFor="inputName5" className="form-label">Permit Number</label>
                             <input type="text" className="form-control" placeholder="Permit Number" value={permitNumber} onChange={(e) => setPermitNumber(e.target.value)} />
-                        </div>
-                        <div className="col-md-4">
+                        </div> */}
+                        {/* <div className="col-md-4">
                             <label htmlFor="inputEmail5" className="form-label">Rejection Reason</label>
                             <input type="text" className="form-control" id="inputEmail5" placeholder='Rejection Reason' value={rejectionReason} onChange={(e) => setRejectionReason(e.target.value)} />
-                        </div>
-                        <div className="col-md-12">
+                        </div> */}
+                        {/* <div className="col-md-12">
                             <label htmlFor="inputEmail5" className="form-label">Officer Notes </label>
                             <input type="text" className="form-control" id="inputEmail5" placeholder='Officer Notes ' value={officerNotes} onChange={(e) => setOfficerNotes(e.target.value)} />
-                        </div><br /><br /><br /><br /><br />
+                        </div> */}
+                        <br /><br /><br /><br /><br />
 
                         <div class="text-center">
                             <button type="submit" class="btn btn-primary">Submit</button>
@@ -570,7 +507,7 @@ function Application() {
             </div>
 
 
-            <div className="card">
+            {/* <div className="card">
                 <div className="card-body">
 
                     <form className="row g-3">
@@ -580,7 +517,7 @@ function Application() {
 
                     </form>
                 </div>
-            </div>
+            </div> */}
 
 
 

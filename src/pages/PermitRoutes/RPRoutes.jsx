@@ -100,7 +100,7 @@ const RPRoutes = createBrowserRouter(
         <Route
           path="/dashboardVpo"
           element={
-            <ProtectedRoute requiredRoles={["VPO", "ADMIN"]}>
+            <ProtectedRoute requiredRoles={["VPO", "ADMIN","APPLICANT"]}>
               <DashboardVpo />
             </ProtectedRoute>
           }
