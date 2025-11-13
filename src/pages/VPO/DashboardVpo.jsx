@@ -1,8 +1,108 @@
-// import { Button, Modal, Table } from 'antd';
-// import axios from 'axios';
-// import React, { useEffect, useState } from 'react';
+import { Button, Modal, Table } from 'antd';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 const Dashboard = () => {
+
+    const [data, setData] = useState([]);
+    const [selectedRecord, setSelectedRecord] = useState(null);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    // Show details modal
+    const showModal = (record) => {
+        setSelectedRecord(record);
+        setIsModalVisible(true);
+    };
+    // Close modal
+    const handleCancel = () => {
+        setIsModalVisible(false);
+        setSelectedRecord(null);
+    };
+
+    // Fetch applications from backend
+    // useEffect(() => {
+    //     const fetchData = async () => {
+    //         try {
+    //             // const res = await axios.get("http://192.168.18.198:8080/api/public/application");
+    //             const res = await axios.get("http://localhost:8080/api/application");
+    //             setData(res.data);
+    //         } catch (error) {
+    //             console.error("Error fetching data:", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem("accessToken"); // or whatever name you used
+                const res = await axios.get("http://localhost:8080/api/application", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                    withCredentials: true, // include cookies if your backend uses them
+                });
+                setData(res.data);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    // Define table columns
+    const tableColumns = [
+        {
+            title: "SN",
+            key: "sn",
+            render: (_, __, index) => index + 1,
+        },
+        {
+            title: "Application Number",
+            dataIndex: "applicationNumber",
+            key: "applicationNumber",
+        },
+        {
+            title: "Research Title",
+            dataIndex: ["researchInfo", "title"],
+            key: "title",
+        },
+        {
+            title: "Applicant Name",
+            key: "applicantName",
+            render: (_, record) =>
+                `${record.applicantInfo?.firstName || ""} ${record.applicantInfo?.lastName || ""}`,
+        },
+        {
+            title: "Status",
+            dataIndex: "status",
+            key: "status",
+            render: (text) => (
+                <span
+                    style={{
+                        color:
+                            text === "DRAFT"
+                                ? "orange"
+                                : text === "APPROVED"
+                                    ? "green"
+                                    : "red",
+                        fontWeight: "bold",
+                    }}
+                >
+                    {text}
+                </span>
+            ),
+        },
+        {
+            title: "Action",
+            key: "action",
+            render: (_, record) => (
+                <Button type="primary" onClick={() => showModal(record)}>
+                    View Details
+                </Button>
+            ),
+        },
+    ];
 
     return (
         <>
@@ -143,7 +243,100 @@ const Dashboard = () => {
 
             </section>
             {/* </div> */}
+            <section className="section dashboard">
+                <div className="row">
+                    <Table
+                        dataSource={data}
+                        columns={tableColumns}
+                        rowKey="id"
+                        pagination={{ pageSize: 10 }}
+                    />
+                </div>
 
+                {/* Modal for viewing full details */}
+                <Modal
+                    title="Application Details"
+                    open={isModalVisible}
+                    onCancel={handleCancel}
+                    footer={null}
+                    width={800}
+                >
+                    {selectedRecord && (
+                        <Descriptions bordered column={2} size="small">
+                            <Descriptions.Item label="Application Number" span={1}>
+                                {selectedRecord.applicationNumber}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Application Type" span={1}>
+                                {selectedRecord.applicationType}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Status" span={1}>
+                                {selectedRecord.status}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Research Title" span={1}>
+                                {selectedRecord.researchInfo?.title}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Research Description" span={1}>
+                                {selectedRecord.researchInfo?.description}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Applicant Name" span={1}>
+                                {selectedRecord.applicantInfo?.firstName} {selectedRecord.applicantInfo?.lastName}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Email" span={1}>
+                                {selectedRecord.applicantInfo?.email}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Institution" span={1}>
+                                {selectedRecord.applicantInfo?.institution}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Research Start Date" span={1}>
+                                {selectedRecord.researchInfo?.startDate}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Research End Date" span={1}>
+                                {selectedRecord.researchInfo?.endDate}
+                            </Descriptions.Item>
+                            <Descriptions.Item label="Budget" span={1}>
+                                {selectedRecord.researchInfo?.budget} {selectedRecord.researchInfo?.currency}
+                            </Descriptions.Item>
+                        </Descriptions>
+                        // <Descriptions bordered column={2} size="small">
+                        //     <Descriptions.Item label="Application Number">
+                        //         {selectedRecord.applicationNumber}
+                        //     </Descriptions.Item>
+                        //     <Descriptions.Item label="Application Type">
+                        //         {selectedRecord.applicationType}
+                        //     </Descriptions.Item>
+                        //     <Descriptions.Item label="Status">
+                        //         {selectedRecord.status}
+                        //     </Descriptions.Item>
+                        //     <Descriptions.Item label="Research Title">
+                        //         {selectedRecord.researchInfo?.title}
+                        //     </Descriptions.Item>
+                        //     <Descriptions.Item label="Research Description">
+                        //         {selectedRecord.researchInfo?.description}
+                        //     </Descriptions.Item>
+                        //     <Descriptions.Item label="Applicant Name">
+                        //         {selectedRecord.applicantInfo?.firstName}{" "}
+                        //         {selectedRecord.applicantInfo?.lastName}
+                        //     </Descriptions.Item>
+                        //     <Descriptions.Item label="Email">
+                        //         {selectedRecord.applicantInfo?.email}
+                        //     </Descriptions.Item>
+                        //     <Descriptions.Item label="Institution">
+                        //         {selectedRecord.applicantInfo?.institution}
+                        //     </Descriptions.Item>
+                        //     <Descriptions.Item label="Research Start Date">
+                        //         {selectedRecord.researchInfo?.startDate}
+                        //     </Descriptions.Item>
+                        //     <Descriptions.Item label="Research End Date">
+                        //         {selectedRecord.researchInfo?.endDate}
+                        //     </Descriptions.Item>
+                        //     <Descriptions.Item label="Budget">
+                        //         {selectedRecord.researchInfo?.budget}{" "}
+                        //         {selectedRecord.researchInfo?.currency}
+                        //     </Descriptions.Item>
+                        // </Descriptions>
+                    )}
+                </Modal>
+            </section>
 
 
             <div className="card">
