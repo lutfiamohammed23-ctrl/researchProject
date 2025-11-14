@@ -8,21 +8,7 @@ const Dashboard = () => {
     const [selectedRecord, setSelectedRecord] = useState(null);
     const [isModalVisible, setIsModalVisible] = useState(false);
 
-    const [applicationData, setApplicationData] = useState(null);
 
-    useEffect(() => {
-        const AppDataFetch = async () => {
-            // const res = await axios.get("http://localhost:8080/api/application")
-            const res = await axios.get("http://localhost:8080/api/application/{id}", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                withCredentials: true,
-            });
-            setApplicationData(res.data[0])
-        }
-        AppDataFetch();
-    }, [])
     // Show details modal
     const showModal = (record) => {
         setSelectedRecord(record);
@@ -51,7 +37,7 @@ const Dashboard = () => {
         const fetchData = async () => {
             try {
                 const token = localStorage.getItem("accessToken");
-                const res = await axios.get("http://localhost:8080/api/application", {
+                const res = await axios.get("http://192.168.18.198:8080/api/application", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -267,305 +253,257 @@ const Dashboard = () => {
                         pagination={{ pageSize: 10 }}
                     />
                 </div>
-
-                {/* Modal for viewing full details */}
                 <Modal
                     title="Application Details"
                     open={isModalVisible}
                     onCancel={handleCancel}
                     footer={null}
-                    width={800}
+                    centered
+                    width="90vw"       // 90% of the viewport width
+                    style={{ maxWidth: "1200px" }}   // Cap the maximum width
                 >
+
+
                     {selectedRecord && (
-                        // <Descriptions bordered column={2} size="small">
-                        //     <Descriptions.Item label="Application Number" span={1}>
-                        //         {selectedRecord.applicationNumber}
-                        //     </Descriptions.Item>
-                        //     <Descriptions.Item label="Application Type" span={1}>
-                        //         {selectedRecord.applicationType}
-                        //     </Descriptions.Item>
-                        //     <Descriptions.Item label="Status" span={1}>
-                        //         {selectedRecord.status}
-                        //     </Descriptions.Item>
-                        //     <Descriptions.Item label="Research Title" span={1}>
-                        //         {selectedRecord.researchInfo?.title}
-                        //     </Descriptions.Item>
-                        //     <Descriptions.Item label="Research Description" span={1}>
-                        //         {selectedRecord.researchInfo?.description}
-                        //     </Descriptions.Item>
-                        //     <Descriptions.Item label="Applicant Name" span={1}>
-                        //         {selectedRecord.applicantInfo?.firstName} {selectedRecord.applicantInfo?.lastName}
-                        //     </Descriptions.Item>
-                        //     <Descriptions.Item label="Email" span={1}>
-                        //         {selectedRecord.applicantInfo?.email}
-                        //     </Descriptions.Item>
-                        //     <Descriptions.Item label="Institution" span={1}>
-                        //         {selectedRecord.applicantInfo?.institution}
-                        //     </Descriptions.Item>
-                        //     <Descriptions.Item label="Research Start Date" span={1}>
-                        //         {selectedRecord.researchInfo?.startDate}
-                        //     </Descriptions.Item>
-                        //     <Descriptions.Item label="Research End Date" span={1}>
-                        //         {selectedRecord.researchInfo?.endDate}
-                        //     </Descriptions.Item>
-                        //     <Descriptions.Item label="Budget" span={1}>
-                        //         {selectedRecord.researchInfo?.budget} {selectedRecord.researchInfo?.currency}
-                        //     </Descriptions.Item>
-                        // </Descriptions>
-                        <div className="card">
-                            <div className="card-body">
-                                <br />
-                                <form className="row g-3">
-                                    {/* Applicant Information */}
 
+                        <div className="row">
 
-                                    <h2 className="sub-title fs-1">Applicant Information</h2><hr />
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>First Name</label>
-                                        <div className="col-sm-10">
-                                            <input value={applicationData.} type="text" className="form-control" id="inputText" placeholder='Lutfia Ali' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Last Name</label>
-                                        <div className="col-sm-10">
-                                            <input value={applicationData.} type="text" className="form-control" id="inputText" placeholder='Mohammed' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Email</label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder='Email' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Phone Number </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Phone Number' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Date Of Birth </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder='Date Of Birth' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Passport Number</label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder='Passport Number ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Gender</label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder='Gender' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Selected Nation</label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder='Select Nation' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>National Id</label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder='National Id' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Address </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder='Address ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>City</label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder='City ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Country </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder='Country ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Postal Code</label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder='Postal Code ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Institution</label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder='Institution' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Position </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Position ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Department </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Department ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
+                            <div className="col-lg-12">
+
+                                <div className="card">
+                                    <div className="card-body">
+                                        <form className="row g-3">
+
+                                            <h2 className="sub-title fs-1">Applicant Information</h2><hr />
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>First Name</label>
+                                                <div className="col-sm-10">
+                                                    <input value={selectedRecord?.applicantInfo?.firstName} type="text" className="form-control" id="inputText" placeholder='Lutfia Ali' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Last Name</label>
+                                                <div className="col-sm-10">
+                                                    <input value={selectedRecord?.applicantInfo?.lastName} type="text" className="form-control" id="inputText" placeholder='Mohammed' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Email</label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.email} className="form-control" id="inputText" placeholder='Email' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Phone Number </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.phoneNumber} className="form-control" id="inputText" placeholder=' Phone Number' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Date Of Birth </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.dateOfBirth} className="form-control" id="inputText" placeholder='Date Of Birth' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Passport Number</label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.passportNumber} className="form-control" id="inputText" placeholder='Passport Number ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Gender</label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.gender} className="form-control" id="inputText" placeholder='Gender' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Selected Nation</label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.nationality} className="form-control" id="inputText" placeholder='Select Nation' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>National Id</label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.nationalId} className="form-control" id="inputText" placeholder='National Id' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Address </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.address} className="form-control" id="inputText" placeholder='Address ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>City</label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.city} className="form-control" id="inputText" placeholder='City ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Country </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.country} className="form-control" id="inputText" placeholder='Country ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Postal Code</label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.postalCode} className="form-control" id="inputText" placeholder='Postal Code ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Institution</label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.institution} className="form-control" id="inputText" placeholder='Institution' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Position </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.position} className="form-control" id="inputText" placeholder=' Position ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Department </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicantInfo?.department} className="form-control" id="inputText" placeholder=' Department ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
 
 
 
 
-                                    <h2 className="sub-title fs-1">Research Information</h2><hr />
+                                            <h2 className="sub-title fs-1">Research Information</h2><hr />
 
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Tittle </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Tittle ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Description </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Description ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Objectives </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Objectives ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Methodology </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Methodology ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Research Type </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Research Type ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Start Date </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Start Date ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> End Date </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' End Date ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Budget </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Budget ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Currency </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Currency ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Funding Source </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Funding Source ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Expected Outcomes </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Expected Outcomes ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Ethical Considerations </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Ethical Considerations ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Data Collection Methods </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Data Collection Methods ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Sample Size </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Sample Size ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-
-
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Tittle </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.tittle} className="form-control" id="inputText" placeholder=' Tittle ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Description </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.description} className="form-control" id="inputText" placeholder=' Description ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Objectives </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.objectives} className="form-control" id="inputText" placeholder=' Objectives ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Methodology </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.methodology} className="form-control" id="inputText" placeholder=' Methodology ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Research Type </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.researchType} className="form-control" id="inputText" placeholder=' Research Type ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Start Date </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.startDate} className="form-control" id="inputText" placeholder=' Start Date ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> End Date </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.endDate} className="form-control" id="inputText" placeholder=' End Date ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Budget </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.budget} className="form-control" id="inputText" placeholder=' Budget ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Currency </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.currency} className="form-control" id="inputText" placeholder=' Currency ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Funding Source </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.fundingSource} className="form-control" id="inputText" placeholder=' Funding Source ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Expected Outcomes </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.expectedOutcomes} className="form-control" id="inputText" placeholder=' Expected Outcomes ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Ethical Considerations </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.ethicalConsiderations} className="form-control" id="inputText" placeholder=' Ethical Considerations ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Data Collection Methods </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.dataCollectionMethods} className="form-control" id="inputText" placeholder=' Data Collection Methods ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Sample Size </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.researchInfo?.sampleSize} className="form-control" id="inputText" placeholder=' Sample Size ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
 
 
-                                    <h2 className="sub-title fs-1">Application Information</h2><hr />
-
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Application No </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Application No ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Position </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Position ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Application Type </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Application Type ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Application Status </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Application Status ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Permit Number </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Permit Number ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Rejection Reason </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Rejection Reason ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
-                                    <div className="row mb-3">
-                                        <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Officer Notes  </label>
-                                        <div className="col-sm-10">
-                                            <input type="text" className="form-control" id="inputText" placeholder=' Officer Notes  ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
-                                        </div>
-                                    </div>
 
 
-                                    <div class="text-center">
-                                        <button type="submit" className="btn btn-primary me-3" >Approved</button>
-                                        <button type="reset" className="btn btn-secondary" style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}>Reject</button>
-                                    </div>
+                                            <h2 className="sub-title fs-1">Application Information</h2><hr />
 
-                                </form>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}>Application No </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicationNumber} className="form-control" id="inputText" placeholder=' Application No ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Application Type </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.applicationType} className="form-control" id="inputText" placeholder=' Application Type ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+                                            <div className="row mb-3">
+                                                <label htmlFor="inputEmail3" className="col-sm-2 col-form-label" style={{ fontWeight: 'bold' }}> Application Status </label>
+                                                <div className="col-sm-10">
+                                                    <input type="text" value={selectedRecord?.status} className="form-control" id="inputText" placeholder=' Application Status ' readOnly style={{ border: 'none', outline: 'none', boxShadow: 'none', backgroundColor: 'transparent' }} />
+                                                </div>
+                                            </div>
+
+
+
+
+
+
+                                            <div className="text-center">
+                                                <button type="submit" className="btn btn-primary me-3" >Approved</button>
+                                                <button type="reset" className="btn btn-secondary" style={{ backgroundColor: '#dc3545', borderColor: '#dc3545' }}>Reject</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}
                 </Modal>
+               
             </section>
 
 
