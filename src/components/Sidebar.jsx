@@ -15,12 +15,12 @@ const Sidebar = () => {
           </Link>
         </li>
 
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <Link className="nav-link collapsed" to="attend">
             <i className="fa-solid fa-clipboard-user" style={{marginRight:"3px",fontSize:"18px"}}></i><span>Attendance</span>
           </Link>
 
-        </li>
+        </li> */}
         <li className="nav-item">
           <Link className="nav-link collapsed" to="apply">
             <i className="fas fa-briefcase" style={{marginRight:"3px",fontSize:"18px"}}></i><span>Application</span>
@@ -28,11 +28,11 @@ const Sidebar = () => {
         </li>
 
 
-        <li className="nav-item">
+        {/* <li className="nav-item">
           <Link className="nav-link collapsed" to="payroll">
             <i className="fas fa-sack-dollar" style={{marginRight:"3px",fontSize:"18px"}}></i><span>Payroll</span>
           </Link>
-        </li>
+        </li> */}
         <li className="nav-item">
           <Link className="nav-link collapsed" to="dashboardVpo">
             <i className="fas fa-sack-dollar" style={{marginRight:"3px",fontSize:"18px"}}></i><span>VPO</span>
